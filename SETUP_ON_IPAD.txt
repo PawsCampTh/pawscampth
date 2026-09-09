@@ -1,0 +1,24 @@
+PawsCamp LINE MINI App — เริ่มจาก iPad
+
+1. เปิด Safari → developers.line.biz
+2. เข้า LINE Developers Console
+3. สร้าง Provider ชื่อ PawsCamp
+4. สร้าง LINE MINI App channel (Thailand) ถ้าบัญชีมีสิทธิ์
+   หรือสร้าง LINE Login channel + LIFF app
+5. ต้องมีเว็บโฮสต์ HTTPS สำหรับ PawsCamp
+6. Deploy โฟลเดอร์โปรเจกต์นี้
+7. เอา LIFF ID ที่ LINE ให้มา
+8. แก้ public/line-config.js → YOUR_LIFF_ID
+9. ตั้ง Endpoint URL ใน LINE Console ให้ตรงกับ URL ที่ Deploy
+10. เปิด LIFF URL/LINE MINI App URL ใน LINE แล้วทดสอบ
+
+ฟีเจอร์ที่ควรทดสอบ:
+- LINE profile
+- GPS permission
+- เพิ่มสุนัข
+- Booking
+- Driver รับงาน
+- จบงาน
+- PromptPay หน้างาน
+- Driver กดยืนยันเงิน
+- ใบเสร็จ
