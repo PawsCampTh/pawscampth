@@ -1,0 +1,10 @@
+{
+  "name": "PawsCamp Pet Ride & Care",
+  "short_name": "PawsCamp",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f7f2ed",
+  "theme_color": "#8b5e46",
+  "description": "PawsCamp แอปรับส่งสุนัข",
+  "icons": []
+}

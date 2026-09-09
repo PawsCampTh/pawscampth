@@ -1,0 +1,340 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#8b5e46">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="PawsCamp">
+<link rel="manifest" href="/manifest.json">
+<title>PawsCamp</title>
+<script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+<script src="/line-config.js"></script>
+<style>
+:root{--bg:#f7f2ed;--card:#fff;--ink:#2a2421;--muted:#7b6f67;--line:#eadfd7;--brown:#8b5e46;--cream:#efe2d8;--green:#4f7a62;--red:#b65d56;--amber:#b9873f;--shadow:0 12px 28px rgba(72,48,32,.11)}
+*{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--ink)}
+button,input,select,textarea{font:inherit}button{cursor:pointer}.app{max-width:430px;margin:auto;min-height:100vh;padding:env(safe-area-inset-top) 14px calc(96px + env(safe-area-inset-bottom))}
+header{display:flex;justify-content:space-between;align-items:center;padding:14px 2px 12px}.brand{display:flex;gap:10px;align-items:center}.logo{width:44px;height:44px;border-radius:14px;background:var(--brown);display:grid;place-items:center;color:#fff;font-size:24px;box-shadow:var(--shadow)}
+h1{font-size:22px;margin:0}.sub,.mini{font-size:12px;color:var(--muted);line-height:1.45}.hero{background:linear-gradient(135deg,#a9785d,#704632);color:#fff;border-radius:24px;padding:22px;box-shadow:var(--shadow);margin-bottom:14px}.hero h2{margin:0 0 6px;font-size:25px}.hero p{margin:0;color:#f7e9df;font-size:14px}
+.card{background:var(--card);border-radius:22px;padding:17px;box-shadow:var(--shadow);margin-bottom:14px}.title{font-weight:800;margin-bottom:12px}.between{display:flex;justify-content:space-between;gap:10px;align-items:center}.row{display:flex;gap:9px}.field{display:flex;align-items:center;gap:10px;border:1px solid var(--line);border-radius:15px;padding:12px 13px;margin-bottom:9px;background:#fff}.field input,.field select,.field textarea{width:100%;border:0;outline:0;background:transparent;color:var(--ink)}.field textarea{min-height:70px;resize:vertical}
+.btn{width:100%;border:0;border-radius:17px;padding:14px 16px;font-weight:800;background:var(--brown);color:#fff}.btn.secondary{background:#efe5de;color:var(--ink)}.btn.green{background:var(--green)}.btn.red{background:var(--red)}.btn:disabled{opacity:.55}
+.badge{display:inline-block;padding:5px 9px;border-radius:999px;background:#e6f0e9;color:var(--green);font-size:11px;font-weight:800}.badge.amber{background:#f5ead7;color:var(--amber)}.badge.red{background:#f7e3e1;color:var(--red)}
+.map{height:205px;border-radius:18px;position:relative;overflow:hidden;background:linear-gradient(90deg,transparent 49%,rgba(255,255,255,.6) 50%,transparent 51%),linear-gradient(transparent 49%,rgba(255,255,255,.6) 50%,transparent 51%),#dce8d9;background-size:44px 44px}.road{position:absolute;background:#ece7e1;border:7px solid white;border-radius:999px;transform:rotate(-18deg);width:380px;height:30px;left:-30px;top:92px}.pin{position:absolute;font-size:28px}.pin.a{left:38px;top:43px}.pin.b{right:42px;bottom:33px}.car{position:absolute;font-size:31px;left:176px;top:94px;transition:.6s}
+.pets,.chips{display:flex;gap:8px;overflow:auto}.chips{flex-wrap:wrap}.pet,.chip{border:1px solid var(--line);background:#fff;border-radius:16px;padding:10px}.pet{min-width:106px}.pet.active,.chip.active{border:2px solid var(--brown);background:#fff8f3}.pet .emoji{font-size:31px}.pet b{display:block}.pet small{color:var(--muted)}.chip{border-radius:999px;padding:9px 12px;font-size:13px}
+.price{font-size:31px;font-weight:900;color:var(--brown)}.trip,.job,.petrow,.adminrow{border:1px solid var(--line);border-radius:16px;padding:12px;margin-bottom:9px}.stat{padding:12px;border:1px solid var(--line);border-radius:16px;text-align:center;flex:1}.stat b{font-size:18px}
+.progress{height:8px;background:#eee8e3;border-radius:999px;overflow:hidden}.progress>div{height:100%;background:var(--green);transition:.4s}.status{display:grid;gap:12px}.step{display:flex;gap:12px}.bubble{width:28px;height:28px;border-radius:50%;background:#eee8e3;display:grid;place-items:center;font-size:12px;flex:0 0 auto}.done .bubble,.current .bubble{background:var(--green);color:#fff}.current b{color:var(--green)}
+.tabs{position:fixed;left:50%;transform:translateX(-50%);bottom:0;width:min(430px,100%);display:grid;grid-template-columns:repeat(5,1fr);background:rgba(255,255,255,.96);border-top:1px solid var(--line);padding:9px 5px calc(8px + env(safe-area-inset-bottom));backdrop-filter:blur(14px)}.tab{text-align:center;font-size:10px;color:var(--muted)}.tab span{display:block;font-size:21px}.tab.active{color:var(--brown);font-weight:800}.hidden{display:none}
+.modal{position:fixed;inset:0;background:rgba(35,27,23,.48);display:none;align-items:flex-end;justify-content:center;z-index:30}.modal.show{display:flex}.sheet{width:min(430px,100%);background:var(--bg);border-radius:26px 26px 0 0;padding:18px 16px calc(20px + env(safe-area-inset-bottom));max-height:84vh;overflow:auto}
+.rolebar{display:flex;background:#eee5df;border-radius:999px;padding:4px;margin-bottom:14px}.rolebar button{flex:1;border:0;border-radius:999px;padding:9px;background:transparent}.rolebar .active{background:#fff;box-shadow:0 3px 10px rgba(0,0,0,.07)}
+hr{border:0;border-top:1px solid var(--line)}
+</style>
+</head>
+<body>
+<div class="app">
+<header>
+  <div class="brand"><div class="logo">🐾</div><div><h1>PawsCamp</h1><div class="sub">Pet Ride & Care</div></div></div>
+  <button onclick="requestNotify()" style="border:0;background:transparent;font-size:22px">🔔</button>
+</header>
+
+<div class="rolebar">
+  <button id="rCustomer" class="active" onclick="setRole('customer')">ลูกค้า</button>
+  <button id="rDriver" onclick="setRole('driver')">คนขับ</button>
+  <button id="rAdmin" onclick="setRole('admin')">แอดมิน</button>
+</div>
+
+<main id="customer">
+  <section class="hero"><h2>รถรับส่งสำหรับน้องหมา</h2><p>จอง • ติดตาม • จ่าย • ดูประวัติ ได้ในที่เดียว</p></section>
+<section class="card" id="lineProfileCard">
+  <div class="between">
+    <div class="row" style="align-items:center">
+      <img id="lineAvatar" alt="" style="width:46px;height:46px;border-radius:50%;display:none;object-fit:cover">
+      <div>
+        <b id="lineDisplayName">กำลังเชื่อมต่อ LINE…</b>
+        <div class="mini" id="lineStatus">PawsCamp LINE MINI App</div>
+      </div>
+    </div>
+    <span id="lineBadge" class="badge amber">LINE</span>
+  </div>
+  <div style="height:10px"></div>
+  <div class="row">
+    <button class="btn secondary" onclick="sharePawsCamp()">ส่งให้เพื่อนใน LINE</button>
+    <button class="btn secondary" id="lineLoginBtn" onclick="lineLogin()">เข้าสู่ระบบ</button>
+  </div>
+</section>
+
+  <section class="card">
+    <div class="title">จุดรับ–ส่ง</div>
+    <div class="field"><input id="pickup" value="บ้านของฉัน" placeholder="จุดรับ"></div>
+    <button class="btn secondary" onclick="useGPS()">📍 ใช้ตำแหน่งปัจจุบัน</button>
+    <div style="height:8px"></div>
+    <div class="field"><input id="dropoff" value="PawsCamp Dog Hotel" placeholder="จุดส่ง"></div>
+    <div class="map"><div class="road"></div><div class="pin a">📍</div><div class="pin b">🏁</div><div class="car">🚙</div></div>
+  </section>
+
+  <section class="card">
+    <div class="between"><div class="title">น้องหมา</div><button onclick="openPetModal()" style="border:0;background:transparent;color:var(--brown);font-weight:800">+ เพิ่ม</button></div>
+    <div id="pets" class="pets"></div>
+  </section>
+
+  <section class="card">
+    <div class="title">บริการ</div>
+    <div class="chips">
+      <button class="chip active" data-trip onclick="setTrip(this,'one')">เที่ยวเดียว</button>
+      <button class="chip" data-trip onclick="setTrip(this,'round')">ไป–กลับ</button>
+      <button class="chip active" onclick="toggleSvc(this,'photo')">ส่งรูปยืนยัน</button>
+      <button class="chip" onclick="toggleSvc(this,'crate')">มีกรง</button>
+      <button class="chip" onclick="toggleSvc(this,'helper')">ผู้ช่วยดูแล</button>
+    </div>
+    <div style="height:10px"></div>
+    <div class="field"><select id="distance" onchange="recalc()"><option value="5">5 กม.</option><option value="10">10 กม.</option><option value="15" selected>15 กม.</option><option value="20">20 กม.</option><option value="30">30 กม.</option></select></div>
+    <div class="field"><select id="rideTime"><option>รับทันที</option><option>วันนี้ 13:00</option><option>วันนี้ 18:00</option><option>พรุ่งนี้ 09:00</option></select></div>
+    <div class="field"><textarea id="note" placeholder="หมายเหตุการดูแล"></textarea></div>
+  </section>
+
+  <section class="card">
+    <div class="title">การชำระเงิน</div>
+    <div class="field"><select id="payment"><option value="onsite_promptpay" selected>สแกน PromptPay หน้างาน</option><option value="cash">เงินสดหน้างาน</option></select></div>
+<div class="mini">ลูกค้าชำระเมื่อถึงปลายทาง คนขับตรวจยอดแล้วกดยืนยันรับเงิน</div>
+  </section>
+
+  <section class="card">
+    <div class="between"><div><div class="mini">ราคาโดยประมาณ</div><div id="price" class="price">฿340</div></div><div class="mini" id="priceDetail"></div></div>
+    <button class="btn" onclick="bookRide()">ยืนยันการจอง</button>
+  </section>
+
+  <section class="card">
+    <div class="title">งานปัจจุบัน</div>
+    <div id="currentRide"><div class="mini">ยังไม่มีงาน</div></div>
+  </section>
+
+  <section class="card">
+    <div class="title">ประวัติ</div>
+    <div id="historyList"></div>
+  </section>
+</main>
+
+<main id="driver" class="hidden">
+  <section class="hero"><h2>โหมดคนขับ 🚗</h2><p>รับงาน อัปเดตสถานะ และดูรายได้</p></section>
+  <section class="card"><div class="between"><div><b>สถานะคนขับ</b><div class="mini">PawsCamp Driver</div></div><span id="driverBadge" class="badge">ออนไลน์</span></div><div style="height:10px"></div><button class="btn secondary" onclick="toggleDriverOnline()">สลับ ออนไลน์/ออฟไลน์</button></section>
+  <section class="card"><div class="title">งานที่รอคนขับ</div><div id="driverJobs"></div></section>
+  <section class="card"><div class="title">งานของฉัน</div><div id="driverCurrent"><div class="mini">ยังไม่มีงาน</div></div></section>
+  <section class="card"><div class="row"><div class="stat"><div class="mini">งานสำเร็จ</div><b id="driverDone">0</b></div><div class="stat"><div class="mini">รายได้จำลอง</div><b id="driverIncome">฿0</b></div></div></section>
+</main>
+
+<main id="admin" class="hidden">
+  <section class="hero"><h2>Admin Dashboard</h2><p>ภาพรวมลูกค้า งาน คนขับ และรายได้</p></section>
+  <section class="card"><div class="row"><div class="stat"><div class="mini">Bookings</div><b id="aBookings">0</b></div><div class="stat"><div class="mini">Completed</div><b id="aDone">0</b></div><div class="stat"><div class="mini">GMV</div><b id="aGmv">฿0</b></div></div></section>
+  <section class="card"><div class="title">รายการงานทั้งหมด</div><div id="adminBookings"></div></section>
+  <section class="card"><div class="title">การตั้งค่าราคา</div><div class="field"><input id="baseFare" type="number" value="100" placeholder="ค่ารับงาน"></div><div class="field"><input id="perKm" type="number" value="16" placeholder="ราคาต่อกม."></div><button class="btn secondary" onclick="savePricing()">บันทึกราคา</button></section>
+</main>
+
+<nav class="tabs">
+  <div class="tab active" onclick="scrollToSection(0,this)"><span>🏠</span>หน้าแรก</div>
+  <div class="tab" onclick="scrollToSection(1,this)"><span>📍</span>งาน</div>
+  <div class="tab" onclick="scrollToSection(2,this)"><span>📋</span>ประวัติ</div>
+  <div class="tab" onclick="openPetModal()"><span>🐶</span>สัตว์เลี้ยง</div>
+  <div class="tab" onclick="openLogin()"><span>👤</span>บัญชี</div>
+</nav>
+</div>
+
+<div id="petModal" class="modal" onclick="if(event.target===this) closeModal('petModal')">
+  <div class="sheet"><div class="between"><div class="title">เพิ่มน้องหมา</div><button onclick="closeModal('petModal')" style="border:0;background:transparent;font-size:22px">✕</button></div>
+  <div class="field"><input id="petName" placeholder="ชื่อ"></div><div class="field"><input id="petAge" type="number" placeholder="อายุ"></div><div class="field"><select id="petEmoji"><option>🐶</option><option>🐕</option><option>🦮</option><option>🐕‍🦺</option></select></div><div class="field"><textarea id="petCare" placeholder="หมายเหตุการดูแล"></textarea></div><button class="btn" onclick="addPet()">บันทึก</button></div>
+</div>
+
+
+<div id="paymentModal" class="modal" onclick="if(event.target===this) closeModal('paymentModal')">
+  <div class="sheet">
+    <div class="between"><div class="title">ชำระเงินหน้างาน</div><button onclick="closeModal('paymentModal')" style="border:0;background:transparent;font-size:22px">✕</button></div>
+    <div id="paymentContent"></div>
+  </div>
+</div>
+
+<div id="receiptModal" class="modal" onclick="if(event.target===this) closeModal('receiptModal')">
+  <div class="sheet">
+    <div class="between"><div class="title">ใบเสร็จ PawsCamp</div><button onclick="closeModal('receiptModal')" style="border:0;background:transparent;font-size:22px">✕</button></div>
+    <div id="receiptContent"></div>
+  </div>
+</div>
+
+<div id="loginModal" class="modal" onclick="if(event.target===this) closeModal('loginModal')">
+  <div class="sheet"><div class="between"><div class="title">เข้าสู่ระบบ / OTP</div><button onclick="closeModal('loginModal')" style="border:0;background:transparent;font-size:22px">✕</button></div>
+  <div class="field"><input id="phone" placeholder="เบอร์โทร"></div><button class="btn secondary" onclick="sendOtp()">ส่ง OTP จำลอง</button><div style="height:8px"></div><div class="field"><input id="otp" placeholder="OTP (ใช้ 123456)"></div><button class="btn" onclick="verifyOtp()">ยืนยัน OTP</button><div class="mini" id="loginState"></div></div>
+</div>
+
+<script>
+const API='/api';
+
+let LINE_CONTEXT={ready:false,loggedIn:false,profile:null};
+
+async function initLINE(){
+  const cfg=window.PAWSCAMP_LINE_CONFIG||{};
+  if(!cfg.liffId || cfg.liffId.includes('YOUR_LIFF_ID')){
+    document.getElementById('lineDisplayName').textContent='PawsCamp Demo';
+    document.getElementById('lineStatus').textContent='ใส่ LIFF ID ใน line-config.js เพื่อเชื่อม LINE';
+    document.getElementById('lineLoginBtn').style.display='none';
+    return;
+  }
+  try{
+    await liff.init({liffId:cfg.liffId,withLoginOnExternalBrowser:false});
+    LINE_CONTEXT.ready=true;
+    if(!liff.isLoggedIn()){
+      document.getElementById('lineDisplayName').textContent='ยังไม่ได้เข้าสู่ระบบ LINE';
+      document.getElementById('lineStatus').textContent=liff.isInClient()?'เปิดใน LINE แล้ว':'เปิดผ่านเว็บเบราว์เซอร์';
+      document.getElementById('lineLoginBtn').style.display='';
+      return;
+    }
+    LINE_CONTEXT.loggedIn=true;
+    document.getElementById('lineLoginBtn').textContent='เชื่อมต่อแล้ว';
+    document.getElementById('lineLoginBtn').disabled=true;
+    try{
+      const profile=await liff.getProfile();
+      LINE_CONTEXT.profile=profile;
+      document.getElementById('lineDisplayName').textContent=profile.displayName||'LINE User';
+      document.getElementById('lineStatus').textContent=liff.isInClient()?'ใช้งานผ่าน LINE':'ใช้งานผ่านเว็บ';
+      if(profile.pictureUrl){
+        const img=document.getElementById('lineAvatar');img.src=profile.pictureUrl;img.style.display='block';
+      }
+      document.getElementById('lineBadge').className='badge';
+      localStorage.setItem('pc_line_profile',JSON.stringify({
+        userId:profile.userId,displayName:profile.displayName,pictureUrl:profile.pictureUrl||''
+      }));
+    }catch(e){
+      document.getElementById('lineDisplayName').textContent='เชื่อม LINE แล้ว';
+    }
+  }catch(e){
+    document.getElementById('lineDisplayName').textContent='เชื่อม LINE ไม่สำเร็จ';
+    document.getElementById('lineStatus').textContent=String(e.message||e);
+  }
+}
+function lineLogin(){
+  if(window.liff && LINE_CONTEXT.ready && !liff.isLoggedIn()){
+    liff.login({redirectUri:location.href});
+  }
+}
+async function sharePawsCamp(){
+  if(window.liff && LINE_CONTEXT.ready && liff.isApiAvailable('shareTargetPicker')){
+    try{
+      await liff.shareTargetPicker([{
+        type:'flex',
+        altText:'PawsCamp รถรับส่งน้องหมา',
+        contents:{
+          type:'bubble',
+          hero:{type:'image',url:(window.PAWSCAMP_LINE_CONFIG.shareImageUrl||'https://dummyimage.com/1200x630/8b5e46/ffffff&text=PawsCamp'),size:'full',aspectRatio:'20:13',aspectMode:'cover'},
+          body:{type:'box',layout:'vertical',contents:[
+            {type:'text',text:'PawsCamp',weight:'bold',size:'xl'},
+            {type:'text',text:'รถรับส่งน้องหมา จองง่ายผ่าน LINE',wrap:true,color:'#7b6f67',margin:'md'}
+          ]},
+          footer:{type:'box',layout:'vertical',contents:[
+            {type:'button',style:'primary',color:'#8b5e46',action:{type:'uri',label:'เปิด PawsCamp',uri:window.PAWSCAMP_LINE_CONFIG.miniAppUrl||location.href}}
+          ]}
+        }
+      }]);
+      return;
+    }catch(e){}
+  }
+  if(navigator.share){try{await navigator.share({title:'PawsCamp',text:'รถรับส่งน้องหมา',url:location.href});return}catch(e){}}
+  alert('คัดลอกลิงก์ PawsCamp แล้วส่งใน LINE ได้เลย');
+}
+
+let role='customer', driverOnline=true, tripType='one', services={photo:true,crate:false,helper:false};
+let pets=[{id:'cucumber',name:'แตงกวา',age:13,emoji:'🐕',care:'ต้องช่วยขึ้นรถ'},{id:'marble',name:'มาร์เบิ้ล',age:5,emoji:'🐶',care:'เดินทางปกติ'}];
+let selectedPet='cucumber', pricing={base:100,perKm:16};
+
+async function api(path,opt={}){try{const r=await fetch(API+path,{headers:{'Content-Type':'application/json'},...opt});return await r.json()}catch(e){return {error:true,message:String(e)}}}
+function money(n){return '฿'+Math.round(n||0).toLocaleString('th-TH')}
+function setRole(r){role=r;document.querySelectorAll('.rolebar button').forEach(x=>x.classList.remove('active'));document.getElementById(r==='customer'?'rCustomer':r==='driver'?'rDriver':'rAdmin').classList.add('active');['customer','driver','admin'].forEach(id=>document.getElementById(id).classList.toggle('hidden',id!==r));refreshAll()}
+function scrollToSection(){window.scrollTo({top:0,behavior:'smooth'})}
+function openPetModal(){document.getElementById('petModal').classList.add('show')}
+function openLogin(){document.getElementById('loginModal').classList.add('show')}
+function closeModal(id){document.getElementById(id).classList.remove('show')}
+function renderPets(){const box=document.getElementById('pets');box.innerHTML='';pets.forEach(p=>{const b=document.createElement('button');b.className='pet '+(p.id===selectedPet?'active':'');b.innerHTML=`<div class="emoji">${p.emoji}</div><b>${p.name}</b><small>${p.age} ปี</small>`;b.onclick=()=>{selectedPet=p.id;renderPets();recalc()};box.appendChild(b)})}
+function addPet(){const name=document.getElementById('petName').value.trim();if(!name)return alert('ใส่ชื่อน้องหมา');const p={id:'p'+Date.now(),name,age:+document.getElementById('petAge').value||0,emoji:document.getElementById('petEmoji').value,care:document.getElementById('petCare').value||''};pets.push(p);selectedPet=p.id;localStorage.setItem('pc_pets',JSON.stringify(pets));renderPets();closeModal('petModal')}
+function setTrip(el,t){document.querySelectorAll('[data-trip]').forEach(x=>x.classList.remove('active'));el.classList.add('active');tripType=t;recalc()}
+function toggleSvc(el,k){services[k]=!services[k];el.classList.toggle('active');recalc()}
+function calcPrice(){let d=+document.getElementById('distance').value;let total=pricing.base+d*pricing.perKm;if(services.crate)total+=50;if(services.helper)total+=100;if(tripType==='round')total*=1.75;return Math.round(total)}
+function recalc(){const d=+document.getElementById('distance').value,total=calcPrice();document.getElementById('price').textContent=money(total);document.getElementById('priceDetail').textContent=`ฐาน ${money(pricing.base)} + ${d} กม.`}
+function useGPS(){if(!navigator.geolocation)return alert('อุปกรณ์นี้ไม่รองรับ GPS');navigator.geolocation.getCurrentPosition(p=>{document.getElementById('pickup').value=`GPS ${p.coords.latitude.toFixed(5)}, ${p.coords.longitude.toFixed(5)}`},()=>alert('กรุณาอนุญาต Location ใน Safari'))}
+async function bookRide(){const pet=pets.find(x=>x.id===selectedPet)||pets[0];const body={pickup:document.getElementById('pickup').value,dropoff:document.getElementById('dropoff').value,pet,price:calcPrice(),distance:+document.getElementById('distance').value,time:document.getElementById('rideTime').value,note:document.getElementById('note').value,payment:document.getElementById('payment').value,tripType,services,lineUser:LINE_CONTEXT.profile?{userId:LINE_CONTEXT.profile.userId,displayName:LINE_CONTEXT.profile.displayName,pictureUrl:LINE_CONTEXT.profile.pictureUrl||''}:null};if(!body.pickup||!body.dropoff)return alert('กรุณาระบุจุดรับและจุดส่ง');const r=await api('/bookings',{method:'POST',body:JSON.stringify(body)});if(r.error)return alert('เชื่อม server ไม่ได้');notify('PawsCamp','จองรถสำเร็จ '+r.booking.id);refreshAll()}
+
+function showOnsitePayment(b){
+ document.getElementById('paymentModal').classList.add('show');
+ const box=document.getElementById('paymentContent');
+ const isPP=b.payment==='onsite_promptpay';
+ box.innerHTML=`<div class="card" style="box-shadow:none;text-align:center">
+   <div class="mini">${isPP?'สแกน PromptPay เพื่อชำระ':'ชำระเงินสดให้คนขับ'}</div>
+   ${isPP?'<div style="font-size:72px;margin:8px 0">▦</div>':''}
+   <div class="price">${money(b.price)}</div>
+   <div class="mini">${isPP?'QR PromptPay หน้างาน (ตัวอย่าง)':'คนขับจะยืนยันหลังรับเงินสด'}</div>
+   ${isPP?`<div style="margin-top:10px;padding:10px;border:1px dashed var(--line);border-radius:14px"><b>PromptPay ID</b><div class="mini">080-000-0000</div></div>`:''}
+   <div style="height:12px"></div>
+   <button class="btn secondary" onclick="closeModal('paymentModal')">ปิด</button>
+ </div>`;
+}
+function showReceipt(b){
+ document.getElementById('receiptModal').classList.add('show');
+ const box=document.getElementById('receiptContent');
+ box.innerHTML=`<div class="card" style="box-shadow:none">
+   <div class="between"><b>PawsCamp Receipt</b><span class="badge">ชำระแล้ว</span></div>
+   <hr>
+   <div class="mini">Booking ID</div><b>${b.id}</b>
+   <div style="height:8px"></div>
+   <div class="mini">น้องหมา</div><b>${b.pet?.emoji||'🐶'} ${b.pet?.name||''}</b>
+   <div style="height:8px"></div>
+   <div class="mini">เส้นทาง</div><b>${b.pickup} → ${b.dropoff}</b>
+   <div style="height:8px"></div>
+   <div class="mini">วิธีชำระ</div><b>${b.payment==='onsite_promptpay'?'PromptPay หน้างาน':'เงินสดหน้างาน'}</b>
+   <div style="height:8px"></div>
+   <div class="mini">ยอดรวม</div><div class="price">${money(b.price)}</div>
+   <div class="mini">สถานะการชำระ: ${b.paymentStatus||'paid'}</div>
+ </div>`;
+}
+
+async function refreshAll(){await loadPricing();await renderCustomer();await renderDriver();await renderAdmin();recalc()}
+async function loadPricing(){const r=await api('/pricing');if(!r.error){pricing=r;document.getElementById('baseFare').value=pricing.base;document.getElementById('perKm').value=pricing.perKm}}
+async function renderCustomer(){const r=await api('/bookings');if(r.error)return;const all=r.bookings||[];const current=all.find(x=>!['completed','cancelled'].includes(x.status));document.getElementById('currentRide').innerHTML=current?bookingCard(current,true):'<div class="mini">ยังไม่มีงาน</div>';const hist=all.filter(x=>x.status==='completed');document.getElementById('historyList').innerHTML=hist.length?hist.map(x=>bookingCard(x,false)).join(''):'<div class="mini">ยังไม่มีประวัติ</div>'}
+function bookingCard(b,active){
+ const paid=b.paymentStatus==='paid';
+ const paymentText=b.payment==='onsite_promptpay'?'PromptPay หน้างาน':'เงินสดหน้างาน';
+ let actions='';
+ if(active && b.status==='completed' && !paid){
+   actions=`<div style="height:8px"></div><button class="btn secondary" onclick='showOnsitePayment(${JSON.stringify(b)})'>💳 ดูวิธีชำระหน้างาน</button>`;
+ }
+ if(paid){
+   actions+=`<div style="height:8px"></div><button class="btn secondary" onclick='showReceipt(${JSON.stringify(b)})'>🧾 ดูใบเสร็จ</button>`;
+ }
+ return `<div class="trip"><div class="between"><b>${b.pet?.emoji||'🐶'} ${b.pet?.name||''}</b><span class="badge ${b.status==='completed'?'':'amber'}">${labelStatus(b.status)}</span></div><div class="mini">${b.pickup} → ${b.dropoff}<br>${b.distance} กม. • ${money(b.price)} • ${paymentText} • ${paid?'ชำระแล้ว':'ยังไม่ชำระ'}</div>${active?`<div style="height:8px"></div><div class="progress"><div style="width:${statusPct(b.status)}%"></div></div>`:''}${actions}</div>`
+}
+function labelStatus(s){return {pending:'รอคนขับ',accepted:'คนขับรับงาน',picked_up:'รับน้องแล้ว',on_trip:'กำลังเดินทาง',completed:'สำเร็จ',cancelled:'ยกเลิก'}[s]||s}
+function statusPct(s){return {pending:15,accepted:35,picked_up:55,on_trip:78,completed:100}[s]||5}
+async function renderDriver(){const r=await api('/bookings');if(r.error)return;const all=r.bookings||[];const jobs=all.filter(x=>x.status==='pending');document.getElementById('driverJobs').innerHTML=driverOnline?(jobs.length?jobs.map(j=>`<div class="job"><div class="between"><b>${j.pet.emoji} ${j.pet.name}</b><b>${money(j.price)}</b></div><div class="mini">${j.pickup} → ${j.dropoff}</div><div style="height:8px"></div><button class="btn green" onclick="acceptJob('${j.id}')">รับงาน</button></div>`).join(''):'<div class="mini">ยังไม่มีงานใหม่</div>'):'<div class="mini">ออฟไลน์อยู่</div>';const mine=all.find(x=>['accepted','picked_up','on_trip'].includes(x.status));document.getElementById('driverCurrent').innerHTML=mine?`<div class="job">${bookingCard(mine,true)}<button class="btn green" onclick="advanceJob('${mine.id}','${mine.status}')">อัปเดตสถานะถัดไป</button></div>`:'<div class="mini">ยังไม่มีงาน</div>';
+ const unpaidDone=all.find(x=>x.status==='completed'&&x.paymentStatus!=='paid');
+ if(!mine&&unpaidDone){
+   document.getElementById('driverCurrent').innerHTML=`<div class="job">${bookingCard(unpaidDone,true)}
+   <button class="btn green" onclick="confirmOnsitePayment('${unpaidDone.id}')">ยืนยันรับเงินแล้ว</button></div>`;
+ }
+const done=all.filter(x=>x.status==='completed');document.getElementById('driverDone').textContent=done.length;document.getElementById('driverIncome').textContent=money(done.reduce((s,x)=>s+(x.price*.75),0))}
+async function acceptJob(id){await api('/bookings/'+id,{method:'PATCH',body:JSON.stringify({status:'accepted',driver:'PawsCamp Driver'})});notify('PawsCamp Driver','รับงานสำเร็จ');refreshAll()}
+
+async function confirmOnsitePayment(id){
+ const r=await api('/bookings/'+id,{method:'PATCH',body:JSON.stringify({paymentStatus:'paid',paidAt:new Date().toISOString()})});
+ if(r.error)return alert('อัปเดตการชำระไม่สำเร็จ');
+ notify('PawsCamp','ยืนยันรับชำระแล้ว');
+ refreshAll();
+}
+
+async function advanceJob(id,status){const next={accepted:'picked_up',picked_up:'on_trip',on_trip:'completed'}[status];if(!next)return;await api('/bookings/'+id,{method:'PATCH',body:JSON.stringify({status:next})});notify('PawsCamp',labelStatus(next));refreshAll()}
+function toggleDriverOnline(){driverOnline=!driverOnline;document.getElementById('driverBadge').textContent=driverOnline?'ออนไลน์':'ออฟไลน์';document.getElementById('driverBadge').className='badge '+(driverOnline?'':'amber');renderDriver()}
+async function renderAdmin(){const r=await api('/bookings');if(r.error)return;const all=r.bookings||[],done=all.filter(x=>x.status==='completed');document.getElementById('aBookings').textContent=all.length;document.getElementById('aDone').textContent=done.length;document.getElementById('aGmv').textContent=money(done.reduce((s,x)=>s+x.price,0));document.getElementById('adminBookings').innerHTML=all.length?all.map(x=>`<div class="adminrow">${bookingCard(x,false)}<div class="row"><button class="btn secondary" onclick="adminSet('${x.id}','completed')">ปิดงาน</button><button class="btn red" onclick="adminSet('${x.id}','cancelled')">ยกเลิก</button></div></div>`).join(''):'<div class="mini">ยังไม่มี booking</div>'}
+async function adminSet(id,status){await api('/bookings/'+id,{method:'PATCH',body:JSON.stringify({status})});refreshAll()}
+async function savePricing(){pricing={base:+document.getElementById('baseFare').value||100,perKm:+document.getElementById('perKm').value||16};await api('/pricing',{method:'POST',body:JSON.stringify(pricing)});recalc();alert('บันทึกราคาแล้ว')}
+async function sendOtp(){const phone=document.getElementById('phone').value.trim();await api('/auth/send-otp',{method:'POST',body:JSON.stringify({phone})});document.getElementById('loginState').textContent='OTP จำลองถูกส่งแล้ว ใช้ 123456'}
+async function verifyOtp(){const r=await api('/auth/verify-otp',{method:'POST',body:JSON.stringify({phone:document.getElementById('phone').value,otp:document.getElementById('otp').value})});document.getElementById('loginState').textContent=r.ok?'เข้าสู่ระบบสำเร็จ':'OTP ไม่ถูกต้อง'}
+function requestNotify(){if('Notification'in window)Notification.requestPermission().then(()=>alert('เปิดแจ้งเตือนแล้ว'))}
+function notify(title,body){if('Notification'in window&&Notification.permission==='granted')new Notification(title,{body});}
+const savedPets=localStorage.getItem('pc_pets');if(savedPets)try{pets=JSON.parse(savedPets)}catch{}
+renderPets();initLINE();refreshAll();
+if('serviceWorker'in navigator)navigator.serviceWorker.register('/sw.js').catch(()=>{});
+</script>
+</body>
+</html>

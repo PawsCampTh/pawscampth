@@ -1,0 +1,7 @@
+{
+  "bookings": [],
+  "pricing": {
+    "base": 100,
+    "perKm": 16
+  }
+}
